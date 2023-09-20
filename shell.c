@@ -46,18 +46,9 @@ char *read_line(void)
  */
 void execute_command(char *command)
 {
-	pid_t pid;
+	pid_t pid, wpid;
 	int status;
-	char **argv = malloc(sizeof(char *) * 2);
-
-	if (!argv)
-	{
-		perror("#cisfun: malloc failed");
-		return;
-	}
-
-	argv[0] = command;
-	argv[1] = NULL;
+	char *argv[] = {command, NULL};
 
 	pid = fork();
 	if (pid == 0)
@@ -66,7 +57,6 @@ void execute_command(char *command)
 		{
 			perror("#cisfun");
 		}
-		free(argv);
 		exit(EXIT_FAILURE);
 	}
 	else if (pid < 0)
@@ -75,12 +65,12 @@ void execute_command(char *command)
 	}
 	else
 	{
-		do
-		{
-			waitpid(pid, &status, WUNTRACED);
+		do {
+			wpid = waitpid(pid, &status, WUNTRACED);
 		}
-		while (!WIFEXITED(status) && !WIFSIGNALED(status));
+		while
+		{
+			(!WIFEXITED(status) && !WIFSIGNALED(status));
+		}
 	}
-
-	free(argv);
 }
