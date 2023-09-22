@@ -50,6 +50,46 @@ char *read_line(void)
 	return (line);
 }
 
+
+/**
+ * Tokenize the input command line into individual words
+ */
+char **tokenize_input(char *command)
+{
+	int bufsize = 64, position = 0;
+	char **tokens = malloc(bufsize * sizeof(char *));
+	char *token;
+
+	if (!tokens)
+	{
+		perror("#cisfun");
+		exit(EXIT_FAILURE);
+	}
+
+	token = strtok(command, " \t\r\n\a");
+	while (token != NULL)
+	{
+		tokens[position] = token;
+		position++;
+
+		if (position >= bufsize)
+		{
+			bufsize += 64;
+			tokens = realloc(tokens, bufsize * sizeof(char *));
+			if (!tokens)
+			{
+				perror("#cisfun");
+				exit(EXIT_FAILURE);
+			}
+		}
+
+
+		token = strtok(NULL, " \t\r\n\a");
+	}
+	tokens[position] = NULL;
+	return (tokens);
+}
+
 /**
  * execute_command - Execute a given command.
  * @command: The command to execute.
