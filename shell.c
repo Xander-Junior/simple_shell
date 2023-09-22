@@ -59,7 +59,13 @@ void execute_command(char *command)
 	pid_t pid;
 	int status;
 	char *argv[2];
-	char *bin_command;
+	char *bin_command = NULL;
+
+	size_t len = strlen(command);
+	if (len > 0 && command[len - 1] == '\n')
+	{
+		command[len - 1] = '\0';
+	}
 
 	argv[0] = command;
 	argv[1] = NULL;
@@ -82,7 +88,7 @@ void execute_command(char *command)
 
 		if (execve(command, argv, NULL) == -1)
 		{
-			perror(command);
+			perror(argv[0]);
 			free(bin_command);
 			exit(EXIT_FAILURE);
 		}
@@ -98,6 +104,5 @@ void execute_command(char *command)
 		}
 		while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
-	if (command[0] != '/')
-		free(bin_command);
+	free(bin_command);
 }
