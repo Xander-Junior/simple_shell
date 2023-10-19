@@ -5,7 +5,7 @@
 
 #define INPUT_SIZE 1024
 
-int main()
+int main(void)
 {
 	char *input = NULL;
 	size_t len = 0;
@@ -16,14 +16,14 @@ int main()
 	{
 		printf("$ ");
 		ssize_t read = getline(&input, &len, stdin);
+		size_t input_length = strlen(input);
+
 		if (read == -1)
 		{
 			printf("\n");
 			free(input);
 			exit(0);
 		}
-
-		size_t input_length = strlen(input);
 		if (input_length > 0 && input[input_length - 1] == '\n')
 		{
 			input[input_length - 1] = '\0';
