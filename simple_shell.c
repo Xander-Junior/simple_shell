@@ -5,6 +5,16 @@
 
 #define INPUT_SIZE 1024
 
+/**
+ * main - Entry point for the shell program.
+ * @void: No parameters.
+ *
+ * Description: Starts a loop that continuously displays a prompt,
+ * waits for user input, and executes the provided command.
+ * Commands without arguments are supported.
+ *
+ * Return: Always returns 0 (successful exit).
+ */
 int main(void)
 {
 	char *input = NULL;
