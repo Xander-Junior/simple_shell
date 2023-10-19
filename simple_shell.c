@@ -21,12 +21,14 @@ int main(void)
 	size_t len = 0;
 	char *argv[2] = {NULL, NULL};
 	char *envp[] = {NULL};
+	ssize_t read;
+	ssize_t input_length;
 
 	while (1)
 	{
 		printf("$ ");
-		ssize_t read = getline(&input, &len, stdin);
-		size_t input_length = strlen(input);
+		read = getline(&input, &len, stdin);
+		input_length = strlen(input);
 
 		if (read == -1)
 		{
