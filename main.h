@@ -5,9 +5,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <signal.h>
 
-void prompt(void);
-char *read_line(void);
-void execute_command(char *command);
+/* Function Prototypes */
+void sigint_handler(int sig);
 
 #endif /* MAIN_H */
