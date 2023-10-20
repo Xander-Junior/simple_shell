@@ -23,6 +23,28 @@ void sigint_handler(int sig)
 }
 
 /**
+ * all_spaces - checks if a string is composed only of spaces or tabs.
+ * @str: The string to check.
+ *
+ * Return: 1 if the string is all spaces or tabs, 0 otherwise.
+ */
+int all_spaces(char *str)
+{
+	while (*str)
+	{
+		if (*str != ' ' && *str != '\t' && *str != '\n')
+		{
+			return (0);
+		}
+		str++;
+	}
+	return (1);
+}
+
+
+
+
+/**
  * main - Entry point for the shell program.
  * @void: No parameters.
  *

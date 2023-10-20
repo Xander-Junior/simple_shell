@@ -11,5 +11,6 @@
 
 /* Function Prototypes */
 void sigint_handler(int sig);
+int all_spaces(char *str);
 
 #endif /* MAIN_H */
