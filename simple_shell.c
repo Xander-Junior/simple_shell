@@ -41,7 +41,6 @@ int all_spaces(char *str)
 	return (1);
 }
 
-c 
 
 
 /**
