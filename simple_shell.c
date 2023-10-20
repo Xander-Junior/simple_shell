@@ -41,7 +41,7 @@ int all_spaces(char *str)
 	return (1);
 }
 
-
+c 
 
 
 /**
@@ -70,11 +70,16 @@ int main(void)
 	{
 		printf("$ ");
 		getline(&input, &len, stdin);
+
+		if (all_spaces(input))
+		{
+			continue;
+		}
+
 		if (feof(stdin))
 		{
-			free(input);
 			printf("\n");
-			exit(0);
+			break;
 		}
 		input_length = strlen(input);
 		if (input_length > 0 && input[input_length - 1] == '\n')
