@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <ctype.h>
+
 
 #define INPUT_SIZE 1024
 
@@ -41,7 +43,25 @@ int all_spaces(char *str)
 	return (1);
 }
 
+/**
+ * trim - Removes leading and trailing white spaces from a string.
+ * @str: The string to trim.
+ *
+ * Return: Pointer to the trimmed string.
+ */
+char* trim(char *str)
+{
+	char *end;
 
+	while(isspace((unsigned char)*str)) str++;
+	if(*str == 0)
+		return (str);
+	end = str + strlen(str) - 1;
+	while(end > str && isspace((unsigned char)*end)) end--;
+	*(end+1) = 0;
+
+	return (str);
+}
 
 /**
  * main - Entry point for the shell program.
@@ -61,6 +81,7 @@ int main(void)
 	int status;
 	ssize_t input_length;
 	char *argv[2];
+	char *command;
 
 
 	signal(SIGINT, sigint_handler);
@@ -70,49 +91,62 @@ int main(void)
 		printf("$ ");
 		getline(&input, &len, stdin);
 
-		if (all_spaces(input))
+		command = strtok(input, "\n");
+		while (command != NULL)
 		{
-			continue;
-		}
-
-		if (feof(stdin))
-		{
-			printf("\n");
-			break;
-		}
-		input_length = strlen(input);
-		if (input_length > 0 && input[input_length - 1] == '\n')
-		{
-			input[input_length - 1] = '\0';
-		}
-
-		if (access(input, F_OK) == -1)
-		{
-			printf("./shell: No such file or directory\n");
-			continue;
-		}
-		child_pid = fork();
-		if (child_pid == -1)
-		{
-			perror("Error");
-			free(input);
-			exit(1);
-		}
-		if (child_pid == 0)
-		{
-			argv[0] = input;
-			argv[1] = NULL;
-			if (execve(input, argv, NULL) == -1)
+			command = trim(command);
+			if (strlen(command) == 0)
 			{
-				perror("./shell");
+				command = strtok(NULL, "\n");
+				continue;
 			}
-			exit(0);
-		}
-		else
-		{
-			wait(&status);
+
+			if (feof(stdin))
+			{
+				printf("\n");
+				break;
+			}
+
+			input_length = strlen(command);
+			if (input_length > 0 && command[input_length - 1] == '\n')
+			{
+				command[input_length - 1] = '\0';
+			}
+
+			if (access(command, F_OK) == -1)
+			{
+				printf("./shell: No such file or directory\n");
+				command = strtok(NULL, "\n");
+				continue;
+			}
+
+			child_pid = fork();
+			if (child_pid == -1)
+			{
+				perror("Error");
+				free(input);
+				exit(1);
+			}
+
+			if (child_pid == 0)
+			{
+				argv[0] = command;
+				argv[1] = NULL;
+				if (execve(command, argv, NULL) == -1)
+				{
+					perror("./shell");
+				}
+				exit(0);
+			}
+			else
+			{
+				wait(&status);
+			}
+
+			command = strtok(NULL, "\n");
 		}
 	}
 	free(input);
 	return (0);
 }
+
